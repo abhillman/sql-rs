@@ -17,7 +17,7 @@ pub SelectClause: algebra::Algebra = {
 pub SelectArg: algebra::Arg = {
     <n:Int> => algebra::Arg::Literal(n),
     "*" => algebra::Arg::Star,
-    <i:Identifier> => algebra::Arg::Identifier(i.clone()),
+    <i:Identifier> => algebra::Arg::Identifier(i),
 }
 
 pub Identifier: algebra::Identifier = {

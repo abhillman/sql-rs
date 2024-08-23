@@ -13,7 +13,7 @@ pub enum Literal {
     Int(i64),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct Identifier(pub String);
 
 #[derive(Debug)]
