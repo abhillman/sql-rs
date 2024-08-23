@@ -1,0 +1,12 @@
+[package]
+name = "untitled2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+lalrpop-util = { version = "0.20.2", features = ["lexer", "unicode"] }
+logos = { version = "0.14.1"}
+rustyline = { version = "14.0.0" }
+
+[build-dependencies]
+lalrpop = "0.20.2"

@@ -1,0 +1,51 @@
+use crate::algebra;
+use crate::token::Token;
+use crate::token::LexicalError;
+
+grammar;
+
+pub Statement: algebra::Algebra = {
+    <s:SelectClause> <f:FromClause> <w:WhereClause?> => {
+        algebra::Algebra::Query(Box::from(s), Box::from(f), w.map(|w| Box::from(w)))
+    },
+}
+
+pub SelectClause: algebra::Algebra = {
+    "SELECT" <a:SelectArg*> => algebra::Algebra::SELECT(a),
+}
+
+pub SelectArg: algebra::Arg = {
+    <n:Int> => algebra::Arg::Literal(n),
+    "*" => algebra::Arg::Star,
+    <i:Identifier> => algebra::Arg::Identifier(i.clone()),
+}
+
+pub Identifier: algebra::Identifier = {
+    "__identifier__" => algebra::Identifier(<>),
+}
+
+pub FromClause: algebra::Algebra = {
+    "FROM" <i:Identifier> => algebra::Algebra::FROM(i)
+}
+
+pub WhereClause: algebra::Algebra = {
+    "WHERE" => algebra::Algebra::WHERE(vec![]),
+}
+
+pub Int: algebra::Literal = {
+    <n:"__number__"> => algebra::Literal::Int(n),
+}
+
+extern {
+  type Location = usize;
+  type Error = LexicalError;
+
+    enum Token {
+        "SELECT" => Token::SELECT,
+        "FROM" => Token::FROM,
+        "WHERE" => Token::WHERE,
+        "__number__" => Token::NUMBER(<i64>),
+        "__identifier__" => Token::IDENTIFIER(<String>),
+        "*" => Token::STAR,
+    }
+}
